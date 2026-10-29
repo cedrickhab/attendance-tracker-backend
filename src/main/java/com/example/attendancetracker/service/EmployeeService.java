@@ -50,4 +50,8 @@ public class EmployeeService {
         employeeRepository.deleteById(id);
         return "Employee deleted successfully";
     }
+
+    public List<Employee> getByLastName(String lastName) {
+        return employeeRepository.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
+    }
 }
