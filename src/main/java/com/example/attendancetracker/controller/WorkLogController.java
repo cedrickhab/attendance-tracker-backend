@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 @RestController
 @RequestMapping("/api/work-logs")
 public class WorkLogController {
@@ -40,5 +42,15 @@ public class WorkLogController {
     public ResponseEntity<?> getByEmployee(@PathVariable String staffNumber) {
         List<WorkLog> workLogs = workLogService.getByEmployee(staffNumber);
         return new ResponseEntity<>(workLogs, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable UUID id) {
+        String message = workLogService.delete(id);
+        if (message.equals("Work log deleted successfully")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
     }
 }

@@ -10,11 +10,16 @@ import java.util.Optional;
 import java.util.UUID;
 import java.time.LocalDate;
 
+import com.example.attendancetracker.repository.WorkLogRepository;
+
 @Service
 public class ShiftService {
 
     @Autowired
     private ShiftRepository shiftRepository;
+
+    @Autowired
+    private WorkLogRepository workLogRepository;
 
     public String save(Shift shift) {
         if (shift.getShiftDate().isBefore(LocalDate.now())) {
@@ -54,8 +59,12 @@ public class ShiftService {
     }
 
     public String delete(UUID id) {
-        if (!shiftRepository.existsById(id)) {
+        Optional<Shift> existing = shiftRepository.findById(id);
+        if (existing.isEmpty()) {
             return "The shift with that id does not exist";
+        }
+        if (workLogRepository.existsByShift(existing.get())) {
+            return "That shift has work logs, delete them first";
         }
         shiftRepository.deleteById(id);
         return "Shift deleted successfully";

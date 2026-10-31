@@ -41,4 +41,13 @@ public class WorkLogService {
     public List<WorkLog> getByEmployee(String staffNumber) {
         return workLogRepository.findWorkLogsOfEmployee(staffNumber);
     }
+
+
+    public String delete(UUID id) {
+        if (!workLogRepository.existsById(id)) {
+            return "The work log with that id does not exist";
+        }
+        workLogRepository.deleteById(id);
+        return "Work log deleted successfully";
+    }
 }

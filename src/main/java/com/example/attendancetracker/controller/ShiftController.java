@@ -71,6 +71,8 @@ public class ShiftController {
         String message = shiftService.delete(id);
         if (message.equals("Shift deleted successfully")) {
             return new ResponseEntity<>(message, HttpStatus.OK);
+        } else if (message.equals("That shift has work logs, delete them first")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
         } else {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }
