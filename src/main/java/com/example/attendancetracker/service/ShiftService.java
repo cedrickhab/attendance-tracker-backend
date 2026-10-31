@@ -17,6 +17,15 @@ public class ShiftService {
     private ShiftRepository shiftRepository;
 
     public String save(Shift shift) {
+        if (shift.getShiftDate().isBefore(LocalDate.now())) {
+            return "Shift date cannot be in the past";
+        }
+        boolean busy = shiftRepository.existsBySupervisorIdAndShiftDateAndStatusNot(
+                shift.getSupervisor().getId(), shift.getShiftDate(), ShiftStatus.MISSED);
+        if (busy) {
+            return "Supervisor already has a shift on that date";
+        }
+        shift.setStatus(ShiftStatus.ROSTERED);
         shiftRepository.save(shift);
         return "Shift saved successfully";
     }

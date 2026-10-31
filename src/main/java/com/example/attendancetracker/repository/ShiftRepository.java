@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface ShiftRepository extends JpaRepository<Shift, UUID> {
     List<Shift> findByStatusOrderByShiftDateAsc(ShiftStatus status);
     List<Shift> findByShiftDateBetweenOrderByShiftDateAsc(LocalDate start, LocalDate end);
+    boolean existsBySupervisorIdAndShiftDateAndStatusNot(UUID supervisorId, LocalDate shiftDate, ShiftStatus status);
 }

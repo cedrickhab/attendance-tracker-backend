@@ -31,7 +31,13 @@ public class ShiftController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Shift shift) {
         String message = shiftService.save(shift);
-        return new ResponseEntity<>(message, HttpStatus.CREATED);
+        if (message.equals("Shift saved successfully")) {
+            return new ResponseEntity<>(message, HttpStatus.CREATED);
+        } else if (message.equals("Shift date cannot be in the past")) {
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping("/all")
