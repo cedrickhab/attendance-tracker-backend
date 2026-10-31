@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+import org.springframework.web.bind.annotation.PatchMapping;
 import com.example.attendancetracker.entity.ShiftStatus;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -87,6 +87,18 @@ public class ShiftController {
         LocalDate endDate = LocalDate.parse(end);
         List<Shift> shifts = shiftService.getBetween(startDate, endDate);
         return new ResponseEntity<>(shifts, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> updateStatus(@PathVariable UUID id, @RequestParam ShiftStatus status) {
+        String message = shiftService.updateStatus(id, status);
+        if (message.equals("Shift status updated successfully")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else if (message.equals("The shift with that id does not exist")) {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

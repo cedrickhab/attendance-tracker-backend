@@ -46,7 +46,7 @@ public class ShiftService {
         Shift oldShift = existing.get();
         oldShift.setShiftDate(shift.getShiftDate());
         oldShift.setStartTime(shift.getStartTime());
-        oldShift.setStatus(shift.getStatus());
+
         oldShift.setEmployee(shift.getEmployee());
         oldShift.setSupervisor(shift.getSupervisor());
         shiftRepository.save(oldShift);
@@ -66,4 +66,30 @@ public class ShiftService {
     public List<Shift> getBetween(LocalDate start, LocalDate end) {
         return shiftRepository.findByShiftDateBetweenOrderByShiftDateAsc(start, end);
     }
+
+    public String updateStatus(UUID id, ShiftStatus newStatus) {
+        Optional<Shift> existing = shiftRepository.findById(id);
+        if (existing.isEmpty()) {
+            return "The shift with that id does not exist";
+        }
+        Shift shift = existing.get();
+        ShiftStatus currentStatus = shift.getStatus();
+        boolean allowed = false;
+        if (currentStatus == ShiftStatus.ROSTERED) {
+            if (newStatus == ShiftStatus.CLOCKED_IN || newStatus == ShiftStatus.MISSED) {
+                allowed = true;
+            }
+        } else if (currentStatus == ShiftStatus.CLOCKED_IN) {
+            if (newStatus == ShiftStatus.CLOCKED_OUT || newStatus == ShiftStatus.MISSED) {
+                allowed = true;
+            }
+        }
+        if (!allowed) {
+            return "Cannot change status from " + currentStatus + " to " + newStatus;
+        }
+        shift.setStatus(newStatus);
+        shiftRepository.save(shift);
+        return "Shift status updated successfully";
+    }
+
 }
