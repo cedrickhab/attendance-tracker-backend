@@ -24,4 +24,9 @@ public interface ShiftRepository extends JpaRepository<Shift, UUID> {
             + "WHERE s.supervisor.id = :supervisorId AND s.shiftDate = :date "
             + "AND s.status <> com.example.attendancetracker.entity.ShiftStatus.CLOCKED_OUT")
     int cancelDay(@Param("supervisorId") UUID supervisorId, @Param("date") LocalDate date);
+
+
+    long countByShiftDate(LocalDate shiftDate);
+
+    long countByStatus(ShiftStatus status);
 }

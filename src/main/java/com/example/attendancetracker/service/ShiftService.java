@@ -12,6 +12,8 @@ import java.time.LocalDate;
 
 import com.example.attendancetracker.repository.WorkLogRepository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class ShiftService {
@@ -110,5 +112,9 @@ public class ShiftService {
     public String cancelDay(UUID supervisorId, LocalDate date) {
         int count = shiftRepository.cancelDay(supervisorId, date);
         return count + " shifts cancelled";
+    }
+
+    public Page<Shift> getPage(Pageable pageable) {
+        return shiftRepository.findAll(pageable);
     }
 }

@@ -20,6 +20,10 @@ import java.util.UUID;
 import org.springframework.web.bind.annotation.PatchMapping;
 import com.example.attendancetracker.entity.ShiftStatus;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/api/shifts")
@@ -114,6 +118,19 @@ public class ShiftController {
         LocalDate day = LocalDate.parse(date);
         String message = shiftService.cancelDay(supervisorId, day);
         return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/page")
+    public ResponseEntity<?> getPage(@RequestParam int page, @RequestParam int size, @RequestParam String sort) {
+        String[] sortParts = sort.split(",");
+        Sort.Direction direction = Sort.Direction.ASC;
+        if (sortParts.length > 1 && sortParts[1].equalsIgnoreCase("desc")) {
+            direction = Sort.Direction.DESC;
+        }
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortParts[0]));
+        Page<Shift> shifts = shiftService.getPage(pageable);
+        return new ResponseEntity<>(shifts, HttpStatus.OK);
     }
 
 }
