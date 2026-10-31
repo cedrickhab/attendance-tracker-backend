@@ -66,4 +66,9 @@ public class DepartmentController {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/unused")
+    public ResponseEntity<?> getUnused() {
+        List<Department> departments = departmentService.getUnused();
+        return new ResponseEntity<>(departments, HttpStatus.OK);
+    }
 }
