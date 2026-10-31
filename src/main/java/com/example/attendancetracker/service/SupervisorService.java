@@ -50,4 +50,7 @@ public class SupervisorService {
         supervisorRepository.deleteById(id);
         return "Supervisor deleted successfully";
     }
+    public List<Supervisor> getByDepartment(String name) {
+        return supervisorRepository.findSupervisorsByDepartmentName(name);
+    }
 }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 @RequestMapping("/api/supervisors")
 public class SupervisorController {
@@ -65,5 +65,10 @@ public class SupervisorController {
         } else {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }
+    }
+    @GetMapping("/by-department")
+    public ResponseEntity<?> getByDepartment(@RequestParam String name) {
+        List<Supervisor> supervisors = supervisorService.getByDepartment(name);
+        return new ResponseEntity<>(supervisors, HttpStatus.OK);
     }
 }
