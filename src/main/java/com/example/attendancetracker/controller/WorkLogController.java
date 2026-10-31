@@ -1,0 +1,34 @@
+package com.example.attendancetracker.controller;
+
+import com.example.attendancetracker.entity.WorkLog;
+import com.example.attendancetracker.service.WorkLogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/work-logs")
+public class WorkLogController {
+
+    @Autowired
+    private WorkLogService workLogService;
+
+    @PostMapping("/save")
+    public ResponseEntity<?> save(@RequestParam UUID shiftId, @RequestBody WorkLog workLog) {
+        String message = workLogService.save(shiftId, workLog);
+        if (message.equals("Work log saved successfully")) {
+            return new ResponseEntity<>(message, HttpStatus.CREATED);
+        } else if (message.equals("The shift with that id does not exist")) {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        }
+    }
+}
