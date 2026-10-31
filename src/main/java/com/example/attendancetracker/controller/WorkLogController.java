@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/work-logs")
 public class WorkLogController {
@@ -30,5 +34,11 @@ public class WorkLogController {
         } else {
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/employee/{staffNumber}")
+    public ResponseEntity<?> getByEmployee(@PathVariable String staffNumber) {
+        List<WorkLog> workLogs = workLogService.getByEmployee(staffNumber);
+        return new ResponseEntity<>(workLogs, HttpStatus.OK);
     }
 }

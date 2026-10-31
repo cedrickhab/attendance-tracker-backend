@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
 
 @Service
 public class WorkLogService {
@@ -34,5 +35,10 @@ public class WorkLogService {
         workLog.setShift(shift);
         workLogRepository.save(workLog);
         return "Work log saved successfully";
+    }
+
+
+    public List<WorkLog> getByEmployee(String staffNumber) {
+        return workLogRepository.findWorkLogsOfEmployee(staffNumber);
     }
 }
