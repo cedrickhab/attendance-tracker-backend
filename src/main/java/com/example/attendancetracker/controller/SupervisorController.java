@@ -71,4 +71,16 @@ public class SupervisorController {
         List<Supervisor> supervisors = supervisorService.getByDepartment(name);
         return new ResponseEntity<>(supervisors, HttpStatus.OK);
     }
+
+    @PutMapping("/{supervisorId}/departments/{departmentId}")
+    public ResponseEntity<?> addDepartment(@PathVariable UUID supervisorId, @PathVariable UUID departmentId) {
+        String message = supervisorService.addDepartment(supervisorId, departmentId);
+        if (message.equals("Department added to the supervisor")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else if (message.equals("The supervisor already has that department")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+    }
 }
