@@ -54,4 +54,7 @@ public class EmployeeService {
     public List<Employee> getByLastName(String lastName) {
         return employeeRepository.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
     }
+    public List<Employee> getBySupervisor(UUID supervisorId) {
+        return employeeRepository.findEmployeesOfSupervisor(supervisorId);
+    }
 }

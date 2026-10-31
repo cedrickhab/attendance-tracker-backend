@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.example.attendancetracker.entity.Supervisor;
+import com.example.attendancetracker.service.SupervisorService;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,7 +26,8 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
-
+    @Autowired
+    private SupervisorService supervisorService;
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Employee employee) {
         String message = employeeService.save(employee);
@@ -71,6 +73,15 @@ public class EmployeeController {
     @GetMapping("/by-last-name")
     public ResponseEntity<?> getByLastName(@RequestParam String lastName) {
         List<Employee> employees = employeeService.getByLastName(lastName);
+        return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
+    @GetMapping("/of-supervisor/{supervisorId}")
+    public ResponseEntity<?> getBySupervisor(@PathVariable UUID supervisorId) {
+        Optional<Supervisor> supervisor = supervisorService.getById(supervisorId);
+        if (supervisor.isEmpty()) {
+            return new ResponseEntity<>("The supervisor with that id does not exist", HttpStatus.NOT_FOUND);
+        }
+        List<Employee> employees = employeeService.getBySupervisor(supervisorId);
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 }
