@@ -66,4 +66,9 @@ public class BranchController {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/free")
+    public ResponseEntity<?> getFree() {
+        List<Branch> branches = branchService.getFree();
+        return new ResponseEntity<>(branches, HttpStatus.OK);
+    }
 }
