@@ -13,13 +13,20 @@ import com.example.attendancetracker.entity.Department;
 import com.example.attendancetracker.repository.DepartmentRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.attendancetracker.entity.Branch;
+import com.example.attendancetracker.repository.BranchRepository;
+
 @Service
 public class SupervisorService {
 
     @Autowired
     private SupervisorRepository supervisorRepository;
+
     @Autowired
     private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private BranchRepository branchRepository;
 
     public String save(Supervisor supervisor) {
         supervisorRepository.save(supervisor);
@@ -78,5 +85,28 @@ public class SupervisorService {
         supervisor.getDepartments().add(department);
         supervisorRepository.save(supervisor);
         return "Department added to the supervisor";
+    }
+
+
+    public String changeBranch(UUID supervisorId, int branchNumber) {
+        Optional<Supervisor> foundSupervisor = supervisorRepository.findById(supervisorId);
+        if (foundSupervisor.isEmpty()) {
+            return "The supervisor with that id does not exist";
+        }
+        Optional<Branch> foundBranch = branchRepository.findByBranchNumber(branchNumber);
+        if (foundBranch.isEmpty()) {
+            return "The branch with that branchNumber does not exist";
+        }
+        Supervisor supervisor = foundSupervisor.get();
+        Branch branch = foundBranch.get();
+        if (supervisor.getBranch() != null && supervisor.getBranch().getId().equals(branch.getId())) {
+            return "Branch changed successfully";
+        }
+        if (supervisorRepository.existsByBranch(branch)) {
+            return "That branch is taken by another supervisor";
+        }
+        supervisor.setBranch(branch);
+        supervisorRepository.save(supervisor);
+        return "Branch changed successfully";
     }
 }

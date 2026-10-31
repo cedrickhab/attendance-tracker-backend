@@ -6,9 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.Optional;
 
 public interface BranchRepository extends JpaRepository<Branch, UUID> {
 
     @Query("SELECT l FROM Branch l WHERE NOT EXISTS (SELECT p FROM Supervisor p WHERE p.branch = l) ORDER BY l.branchNumber")
     List<Branch> findFreeBranches();
+
+
+    Optional<Branch> findByBranchNumber(int branchNumber);
 }

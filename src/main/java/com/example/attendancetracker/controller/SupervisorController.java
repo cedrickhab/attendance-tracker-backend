@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PatchMapping;
 @RestController
 @RequestMapping("/api/supervisors")
 public class SupervisorController {
@@ -80,6 +82,22 @@ public class SupervisorController {
         } else if (message.equals("The supervisor already has that department")) {
             return new ResponseEntity<>(message, HttpStatus.CONFLICT);
         } else {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @PatchMapping("/{supervisorId}/branch")
+    public ResponseEntity<?> changeBranch(@PathVariable UUID supervisorId, @RequestParam int branchNumber) {
+        String message = supervisorService.changeBranch(supervisorId, branchNumber);
+
+        if (message.equals("Branch changed successfully")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+        else if (message.equals("That branch is taken by another supervisor")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        }
+        else {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }
     }
