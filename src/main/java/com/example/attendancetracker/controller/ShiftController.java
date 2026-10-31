@@ -103,4 +103,10 @@ public class ShiftController {
         }
     }
 
+    @GetMapping("/stats/by-status")
+    public ResponseEntity<?> countPerStatus() {
+        List<Object[]> rows = shiftService.countPerStatus();
+        return new ResponseEntity<>(rows, HttpStatus.OK);
+    }
+
 }

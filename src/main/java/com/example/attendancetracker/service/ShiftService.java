@@ -101,4 +101,7 @@ public class ShiftService {
         return "Shift status updated successfully";
     }
 
+    public List<Object[]> countPerStatus() {
+        return shiftRepository.countShiftsPerStatus();
+    }
 }
