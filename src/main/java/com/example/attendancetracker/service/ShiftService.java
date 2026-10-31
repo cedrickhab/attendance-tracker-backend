@@ -4,7 +4,7 @@ import com.example.attendancetracker.entity.Shift;
 import com.example.attendancetracker.repository.ShiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.example.attendancetracker.entity.ShiftStatus;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -49,5 +49,8 @@ public class ShiftService {
         }
         shiftRepository.deleteById(id);
         return "Shift deleted successfully";
+    }
+    public List<Shift> getByStatus(ShiftStatus status) {
+        return shiftRepository.findByStatusOrderByShiftDateAsc(status);
     }
 }

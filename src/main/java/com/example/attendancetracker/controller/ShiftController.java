@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.example.attendancetracker.entity.ShiftStatus;
+import org.springframework.web.bind.annotation.RequestParam;
+
 @RestController
 @RequestMapping("/api/shifts")
 public class ShiftController {
@@ -65,5 +68,11 @@ public class ShiftController {
         } else {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/by-status")
+    public ResponseEntity<?> getByStatus(@RequestParam ShiftStatus status) {
+        List<Shift> shifts = shiftService.getByStatus(status);
+        return new ResponseEntity<>(shifts, HttpStatus.OK);
     }
 }
