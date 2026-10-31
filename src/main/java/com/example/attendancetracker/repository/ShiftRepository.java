@@ -5,9 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.attendancetracker.entity.ShiftStatus;
 import java.util.List;
-
+import java.time.LocalDate;
 import java.util.UUID;
 
 public interface ShiftRepository extends JpaRepository<Shift, UUID> {
     List<Shift> findByStatusOrderByShiftDateAsc(ShiftStatus status);
+    List<Shift> findByShiftDateBetweenOrderByShiftDateAsc(LocalDate start, LocalDate end);
 }

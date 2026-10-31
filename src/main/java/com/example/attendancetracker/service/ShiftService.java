@@ -8,6 +8,7 @@ import com.example.attendancetracker.entity.ShiftStatus;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.time.LocalDate;
 
 @Service
 public class ShiftService {
@@ -52,5 +53,8 @@ public class ShiftService {
     }
     public List<Shift> getByStatus(ShiftStatus status) {
         return shiftRepository.findByStatusOrderByShiftDateAsc(status);
+    }
+    public List<Shift> getBetween(LocalDate start, LocalDate end) {
+        return shiftRepository.findByShiftDateBetweenOrderByShiftDateAsc(start, end);
     }
 }

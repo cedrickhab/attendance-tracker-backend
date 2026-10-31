@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -75,4 +75,12 @@ public class ShiftController {
         List<Shift> shifts = shiftService.getByStatus(status);
         return new ResponseEntity<>(shifts, HttpStatus.OK);
     }
+    @GetMapping("/between")
+    public ResponseEntity<?> getBetween(@RequestParam String start, @RequestParam String end) {
+        LocalDate startDate = LocalDate.parse(start);
+        LocalDate endDate = LocalDate.parse(end);
+        List<Shift> shifts = shiftService.getBetween(startDate, endDate);
+        return new ResponseEntity<>(shifts, HttpStatus.OK);
+    }
+
 }
