@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.time.LocalDate;
 
 import com.example.attendancetracker.repository.WorkLogRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ShiftService {
@@ -103,5 +104,11 @@ public class ShiftService {
 
     public List<Object[]> countPerStatus() {
         return shiftRepository.countShiftsPerStatus();
+    }
+
+    @Transactional
+    public String cancelDay(UUID supervisorId, LocalDate date) {
+        int count = shiftRepository.cancelDay(supervisorId, date);
+        return count + " shifts cancelled";
     }
 }

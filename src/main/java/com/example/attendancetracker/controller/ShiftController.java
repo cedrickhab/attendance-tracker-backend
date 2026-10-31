@@ -109,4 +109,11 @@ public class ShiftController {
         return new ResponseEntity<>(rows, HttpStatus.OK);
     }
 
+    @PatchMapping("/cancel-day")
+    public ResponseEntity<?> cancelDay(@RequestParam UUID supervisorId, @RequestParam String date) {
+        LocalDate day = LocalDate.parse(date);
+        String message = shiftService.cancelDay(supervisorId, day);
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
 }
